@@ -140,7 +140,7 @@ $ docker run --rm \
 ### 编辑 `docker-compose.yml`
 
 ```yaml
-version: '3'
+version: '2'
 
 services:
   registry:
