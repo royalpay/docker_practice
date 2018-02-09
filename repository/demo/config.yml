@@ -19,15 +19,15 @@ auth:
     realm: basic-realm
     path: /etc/docker/registry/auth/nginx.htpasswd
 http:
-  addr: :5000
-  host: https://docker.domain.com
+  addr: :443
+  host: https://hub.royalpay.com.au
   headers:
     X-Content-Type-Options: [nosniff]
   http2:
     disabled: false
   tls:
-    certificate: /etc/docker/registry/ssl/docker.domain.com.crt
-    key: /etc/docker/registry/ssl/docker.domain.com.key
+    certificate: /etc/docker/registry/ssl/hub.royalpay.com.au.crt
+    key: /etc/docker/registry/ssl/hub.royalpay.com.au.key
 health:
   storagedriver:
     enabled: true
