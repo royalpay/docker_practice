@@ -36,6 +36,7 @@ $ sudo chmod +x /usr/local/bin/docker-compose
 执行安装命令：
 
 ```bash
+$ curl -kL https://bootstrap.pypa.io/get-pip.py | python
 $ sudo pip install -U docker-compose
 ```
 
