@@ -182,15 +182,15 @@ $ docker login hub.royalpay.com.au
 尝试推送、拉取镜像。
 
 ```bash
-$ docker pull ubuntu:17.10
+$ docker pull hello-world:latest
 
-$ docker tag ubuntu:17.10 hub.royalpay.com.au/royalpay/ubuntu:17.10
+$ docker tag hello-world:latest hub.royalpay.com.au/royalpay/hello-world:latest
 
-$ docker push hub.royalpay.com.au/royalpay/ubuntu:17.10
+$ docker push hub.royalpay.com.au/royalpay/hello-world:latest
 
-$ docker image rm hub.royalpay.com.au/royalpay/ubuntu:17.10
+$ docker image rm hub.royalpay.com.au/royalpay/hello-world:latest
 
-$ docker pull hub.royalpay.com.au/royalpay/ubuntu:17.10
+$ docker pull hub.royalpay.com.au/royalpay/hello-world:latest
 ```
 
 如果我们退出登录，尝试推送镜像。
@@ -198,7 +198,7 @@ $ docker pull hub.royalpay.com.au/royalpay/ubuntu:17.10
 ```bash
 $ docker logout hub.royalpay.com.au
 
-$ docker push hub.royalpay.com.au/royalpay/ubuntu:17.10
+$ docker push hub.royalpay.com.au/royalpay/hello-world:latest
 
 no basic auth credentials
 ```
