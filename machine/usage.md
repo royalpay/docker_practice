@@ -32,7 +32,9 @@ $ docker-machine create -d virtualbox test
 $ docker-machine create --driver=generic --generic-ip-address=192.168.0.4 --generic-ssh-key ~/.ssh/id_rsa node01
 ```
 
->注意：需要设置192.168.0.4可以使用SSH 通过密钥登录，并将密钥上传至docker-machine主机的~/.ssh/目录，参考地址：http://www.runoob.com/w3cnote/set-ssh-login-key.html。
+>注意：
+*需要设置192.168.0.4可以使用SSH 通过密钥登录，并将密钥上传至docker-machine主机的~/.ssh/目录，参考地址：http://www.runoob.com/w3cnote/set-ssh-login-key.html。
+*docker-machine主要需要访问192.168.0.4的2376端口。
 
 #### macOS xhyve 驱动
 
