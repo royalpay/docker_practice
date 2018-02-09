@@ -24,6 +24,16 @@ $ docker-machine create -d virtualbox test
 
 更多参数请使用 `docker-machine create --driver virtualbox --help` 命令查看。
 
+#### 本地主机
+
+使用 `generic` 类型的驱动，创建一台 Docker 主机，命名为 master。
+
+```bash
+$ docker-machine create --driver=generic --generic-ip-address=192.168.0.4 --generic-ssh-key ~/.ssh/id_rsa node01
+```
+
+>注意：需要设置192.168.0.4可以使用SSH 通过密钥登录，并将密钥上传至docker-machine主机的~/.ssh/目录，参考地址：http://www.runoob.com/w3cnote/set-ssh-login-key.html。
+
 #### macOS xhyve 驱动
 
 `xhyve` 驱动 GitHub: https://github.com/zchee/docker-machine-driver-xhyve
