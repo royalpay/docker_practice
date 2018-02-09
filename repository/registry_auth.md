@@ -8,7 +8,7 @@
 
 如果你拥有一个域名，国内各大云服务商均提供免费的站点证书。你也可以使用 `openssl` 自行签发证书。
 
-这里假设我们将要搭建的私有仓库地址为 `docker.domain.com`，下面我们介绍使用 `openssl` 自行签发 `docker.domain.com` 的站点 SSL 证书。
+这里假设我们将要搭建的私有仓库地址为 `hub.royalpay.com.au`，下面我们介绍使用 `openssl` 自行签发 `hub.royalpay.com.au` 的站点 SSL 证书。
 
 第一步创建 `CA` 私钥。
 
@@ -22,7 +22,7 @@ $ openssl genrsa -out "root-ca.key" 4096
 $ openssl req \
           -new -key "root-ca.key" \
           -out "root-ca.csr" -sha256 \
-          -subj '/C=CN/ST=Shanxi/L=Datong/O=Your Company Name/CN=Your Company Name Docker Registry CA'
+          -subj '/C=AU/ST=WA/L=WA/O=Royalpay/CN=hub.royalpay.com.au'
 ```
 
 >以上命令中 `-subj` 参数里的 `/C` 表示国家，如 `CN`；`/ST` 表示省；`/L` 表示城市或者地区；`/O` 表示组织名；`/CN` 通用名称。
@@ -48,14 +48,14 @@ $ openssl x509 -req  -days 3650  -in "root-ca.csr" \
 第五步生成站点 `SSL` 私钥。
 
 ```bash
-$ openssl genrsa -out "docker.domain.com.key" 4096
+$ openssl genrsa -out "hub.royalpay.com.au.key" 4096
 ```
 
 第六步使用私钥生成证书请求文件。
 
 ```bash
-$ openssl req -new -key "docker.domain.com.key" -out "site.csr" -sha256 \
-          -subj '/C=CN/ST=Shanxi/L=Datong/O=Your Company Name/CN=docker.domain.com'
+$ openssl req -new -key "hub.royalpay.com.au.key" -out "site.csr" -sha256 \
+          -subj '/C=AU/ST=WA/L=WA/O=Royalpay/CN=hub.royalpay.com.au'
 ```
 
 第七步配置证书，新建 `site.cnf` 文件。
@@ -66,7 +66,7 @@ authorityKeyIdentifier=keyid,issuer
 basicConstraints = critical,CA:FALSE
 extendedKeyUsage=serverAuth
 keyUsage = critical, digitalSignature, keyEncipherment
-subjectAltName = DNS:docker.domain.com, IP:127.0.0.1
+subjectAltName = DNS:hub.royalpay.com.au, IP:127.0.0.1
 subjectKeyIdentifier=hash
 ```
 
@@ -75,12 +75,12 @@ subjectKeyIdentifier=hash
 ```bash
 $ openssl x509 -req -days 750 -in "site.csr" -sha256 \
     -CA "root-ca.crt" -CAkey "root-ca.key"  -CAcreateserial \
-    -out "docker.domain.com.crt" -extfile "site.cnf" -extensions server
+    -out "hub.royalpay.com.au.crt" -extfile "site.cnf" -extensions server
 ```
 
-这样已经拥有了 `docker.domain.com` 的网站 SSL 私钥 `docker.domain.com.key` 和 SSL 证书 `docker.domain.com.crt`。
+这样已经拥有了 `hub.royalpay.com.au` 的网站 SSL 私钥 `hub.royalpay.com.au.key` 和 SSL 证书 `hub.royalpay.com.au.crt`。
 
-新建 `ssl` 文件夹并将 `docker.domain.com.key` `docker.domain.com.crt` 这两个文件移入，删除其他文件。
+新建 `ssl` 文件夹并将 `hub.royalpay.com.au.key` `hub.royalpay.com.au.crt` 这两个文件移入，删除其他文件。
 
 ### 配置私有仓库
 
@@ -109,14 +109,14 @@ auth:
     path: /etc/docker/registry/auth/nginx.htpasswd
 http:
   addr: :443
-  host: https://docker.domain.com
+  host: https://hub.royalpay.com.au
   headers:
     X-Content-Type-Options: [nosniff]
   http2:
     disabled: false
   tls:
-    certificate: /etc/docker/registry/ssl/docker.domain.com.crt
-    key: /etc/docker/registry/ssl/docker.domain.com.key
+    certificate: /etc/docker/registry/ssl/hub.royalpay.com.au.crt
+    key: /etc/docker/registry/ssl/hub.royalpay.com.au.key
 health:
   storagedriver:
     enabled: true
@@ -132,7 +132,7 @@ $ mkdir auth
 $ docker run --rm \
     --entrypoint htpasswd \
     registry \
-    -Bbn username password > auth/nginx.htpasswd
+    -Bbn royalpay 1 > auth/nginx.htpasswd
 ```
 
 > 将上面的 `username` `password` 替换为你自己的用户名和密码。
@@ -160,7 +160,7 @@ volumes:
 编辑 `/etc/hosts`
 
 ```bash
-docker.domain.com 127.0.0.1
+hub.royalpay.com.au 127.0.0.1
 ```
 
 ### 启动
@@ -176,7 +176,7 @@ $ docker-compose up -d
 登录到私有仓库。
 
 ```bash
-$ docker login docker.domain.com
+$ docker login hub.royalpay.com.au
 ```
 
 尝试推送、拉取镜像。
@@ -184,21 +184,21 @@ $ docker login docker.domain.com
 ```bash
 $ docker pull ubuntu:17.10
 
-$ docker tag ubuntu:17.10 docker.domain.com/username/ubuntu:17.10
+$ docker tag ubuntu:17.10 hub.royalpay.com.au/royalpay/ubuntu:17.10
 
-$ docker push docker.domain.com/username/ubuntu:17.10
+$ docker push hub.royalpay.com.au/royalpay/ubuntu:17.10
 
-$ docker image rm docker.domain.com/username/ubuntu:17.10
+$ docker image rm hub.royalpay.com.au/royalpay/ubuntu:17.10
 
-$ docker pull docker.domain.com/username/ubuntu:17.10
+$ docker pull hub.royalpay.com.au/royalpay/ubuntu:17.10
 ```
 
 如果我们退出登录，尝试推送镜像。
 
 ```bash
-$ docker logout docker.domain.com
+$ docker logout hub.royalpay.com.au
 
-$ docker push docker.domain.com/username/ubuntu:17.10
+$ docker push hub.royalpay.com.au/royalpay/ubuntu:17.10
 
 no basic auth credentials
 ```
