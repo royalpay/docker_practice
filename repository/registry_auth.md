@@ -160,7 +160,7 @@ volumes:
 编辑 `/etc/hosts`
 
 ```bash
-hub.royalpay.com.au 127.0.0.1
+127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4 hub.royalpay.com.au
 ```
 
 ### 启动
