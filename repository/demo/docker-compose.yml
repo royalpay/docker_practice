@@ -1,13 +1,35 @@
-version: '3'
-
-services:
-  registry:
-    image: registry
-    ports:
-      - "443:5000"
-    volumes:
-      - ./:/etc/docker/registry
-      - registry-data:/var/lib/registry
-
-volumes:
-  registry-data:
+version: 0.1
+log:
+  accesslog:
+    disabled: true
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+    environment: staging
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+auth:
+  htpasswd:
+    realm: basic-realm
+    path: /etc/docker/registry/auth/nginx.htpasswd
+http:
+  addr: :443
+  host: https://hub.royalpay.com.au
+  headers:
+    X-Content-Type-Options: [nosniff]
+  http2:
+    disabled: false
+  tls:
+    certificate: /etc/docker/registry/ssl/hub.royalpay.com.au.crt
+    key: /etc/docker/registry/ssl/hub.royalpay.com.au.key
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+threshold: 3
